@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "963357072908",
+    "firebase_url": "https://givefit-5ba8e.firebaseio.com",
+    "project_id": "givefit-5ba8e",
+    "storage_bucket": "givefit-5ba8e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:963357072908:android:c04195039e28375ed11829",
+        "android_client_info": {
+          "package_name": "com.amin.givefit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "963357072908-gbeonfljqqir3da85rtfln8icf5q5sf1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.amin.givefit",
+            "certificate_hash": "32a09ac20765b801d931b9e894fff32950a652dc"
+          }
+        },
+        {
+          "client_id": "963357072908-12o53uljsioj1i75sh6thbpq9lq8cb4o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHfSzLcNmDFzSmTEoaHE0arG8OeY5pG_k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "963357072908-12o53uljsioj1i75sh6thbpq9lq8cb4o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
