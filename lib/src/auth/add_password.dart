@@ -1,11 +1,23 @@
+import 'dart:io';
+
+import 'package:device_id/device_id.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:givefit/apis/api_manager.dart';
 import 'package:givefit/utils/color_utils.dart';
 import 'package:givefit/utils/constants.dart';
+import 'package:givefit/utils/dialog_utils.dart';
 import 'package:givefit/utils/navigation.dart';
+import 'package:givefit/utils/preference_utils.dart';
 import 'package:givefit/widgets/custom_background.dart';
 import 'package:givefit/widgets/input_widget.dart';
+import 'package:givefit/utils/progress_dialog.dart';
 
 class AddPasswordScreen extends StatelessWidget {
+  TextEditingController controller=TextEditingController();
+  TextEditingController Passcontroller=TextEditingController();
+  TextEditingController ConformPasscontroller=TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return CustomBackground(
@@ -33,14 +45,24 @@ class AddPasswordScreen extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(20),
               child: Text(
-                'Password',
+                'Sign up',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 25,
                     color: Colors.white),
               ),
             ),
+            Padding(
+              padding: EdgeInsets.all(0),
+              child: InputWidget(
+                controller: controller,
+                hint: 'Enter your Email Address',
+                prefixIcon: 'assets/images/ic_email.png',
+              ),
+            ),
+
             InputWidget(
+              controller: Passcontroller,
               hint: 'Password',
               obscureText: true,
               prefixIcon: 'assets/images/ic_password.png',
@@ -48,6 +70,7 @@ class AddPasswordScreen extends StatelessWidget {
             Container(
               margin: EdgeInsets.only(top: 10),
               child: InputWidget(
+                controller: ConformPasscontroller,
                 obscureText: true,
                 hint: 'Confirm Password',
                 prefixIcon: 'assets/images/ic_password.png',
@@ -55,7 +78,7 @@ class AddPasswordScreen extends StatelessWidget {
             ),
             GestureDetector(
               onTap: (){
-                NavigationUtils.pushAndRemoveUntil(context, routeExercise);
+                userSignUp(context);
               },
               child: Container(
                 width: 250,
@@ -65,7 +88,7 @@ class AddPasswordScreen extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                      'GO',
+                    'GO',
                     style: TextStyle(fontSize: 18, color: Colors.white,fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -75,5 +98,51 @@ class AddPasswordScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  userSignUp(BuildContext context) async {
+
+    if(Passcontroller.text == ConformPasscontroller.text)
+    {
+      ProgressDialogUtils.showProgressDialog(context);
+      String deviceId=await  DeviceId.getID;
+      String deviceName=Platform.isAndroid?"A":"I";
+
+      FormData req=FormData.fromMap({
+        "email":controller.text,
+        "device_type":deviceName,
+        "device_id":deviceId,
+        "password":Passcontroller.text
+      });
+
+      var res=await ApiManager().SignInUser(req);
+      if(res.status)
+      {
+        var pref=await initSharedPreferences();
+        pref.setBool("isLogin", true);
+        pref.setString("email", res.user.email);
+        pref.setString("firstName", res.user.firstName);
+        pref.setString("lastName", res.user.lastName);
+        pref.setInt("userId", res.user.id);
+        pref.setString("image", res.user.image);
+
+
+
+        ProgressDialogUtils.dismissProgressDialog();
+
+        NavigationUtils.pushReplacement(context, routeExercise);
+      }
+      else{
+        ProgressDialogUtils.dismissProgressDialog();
+        DialogUtils.showAlertDialog(context, res.message);
+
+      }
+
+
+    }else{
+      DialogUtils.showAlertDialog(context, "Please enter conform password same as password");
+
+    }
+
   }
 }

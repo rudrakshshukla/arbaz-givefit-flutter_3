@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:givefit/src/auth/model/res_filterlist.dart';
 import 'package:givefit/src/auth/model/res_login.dart';
+import 'package:givefit/src/auth/model/res_signup.dart';
 import 'dart:convert';
 import 'api_end_points.dart';
 import 'api_service.dart';
@@ -35,13 +36,13 @@ class ApiManager{
     }}
   
 
-  Future<void> SignInUser(FormData req) async {
+  Future<Res_signup> SignInUser(FormData req) async {
     try {
       final response = await _apiService.post(
           apiSignUp,
           data: req
       );
-      return Res_login.fromJson(response.data);
+      return Res_signup.fromJson(response.data);
     } on DioError catch (error) {
       throw BaseModel.fromJson(error.response.data);
     }
